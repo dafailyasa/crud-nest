@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from "typeorm";
 import { AbstractEntity } from "./abstract-entity";
 import * as bcrypt from 'bcrypt';
 
@@ -19,7 +19,12 @@ export class UserEntity extends AbstractEntity {
 	@Column()
 	password: string
 
-	//TODO: add following
+	@ManyToMany(type => UserEntity, user => user.followee)
+	@JoinTable()
+	followers: UserEntity[];
+
+	@ManyToMany(type => UserEntity, user => user.followers)
+	followee: UserEntity[]
 
 	@BeforeInsert()
 	async hashPassword() {
@@ -28,5 +33,10 @@ export class UserEntity extends AbstractEntity {
 
 	async comparePassword(password: string) {
 		return await bcrypt.compare(password, this.password)
+	}
+
+	toProfile(user: UserEntity) {
+		const following = this.followers.includes(user);
+		return { ...user, following }
 	}
 }
