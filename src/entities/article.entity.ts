@@ -39,7 +39,6 @@ export class ArticleEntity extends AbstractEntity {
     this.slug = data
   }
 
-
   toArticle(user: UserEntity) {
     let favorited = null;
     if (user) {

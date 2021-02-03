@@ -11,3 +11,14 @@ export class UpdateArticleDTO {
   description: string;
   tagList: string[]
 }
+
+export interface FindFeedQuery {
+  limit?: number;
+  offset?: number
+}
+
+export interface FindAllQuery extends FindFeedQuery {
+  tag?: string;
+  author?: string;
+  favorited?: string;
+}
